@@ -108,22 +108,18 @@
   else                            // if condition is false run code below
     return(0);                    // exit function and return 0
   }
-/*--      END RELEASED FUNCTION      --*/
+//end of release function
 
 
-/*--      DELAY FUNCTION
-This function will is a nested loops to create delays rather than using the delay(); function built in to stdlib.h
+//This function will is a nested loops to create delays rather than using the delay(); function built in to stdlib.h
 */
  void delay(unsigned int time)
  {
   unsigned int delay;             // sets delay as an unsigned intiger
-  while(time > 0)                 // loops while time is more than 0
+  while(time > 0)
     {
-     time--;                      // subtract 1 from time variable
-     for(                         // loop a for condition
-         delay=170;               // initialization statement
-         delay>0;                 // test expression
-         delay--                  // update statement (decrement var delay by 1)
-        );
+     time--;
+     for(delay=170; delay>0;delay--);
+
     }
  }
