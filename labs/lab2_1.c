@@ -1,7 +1,6 @@
 #include <ez8.h>
 
 
-
  void main(void)
  {
 	unsigned char leds = 0x05;					//store 0000|0110 into leds
