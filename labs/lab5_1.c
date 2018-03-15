@@ -3,10 +3,9 @@
 
  void main()
  {
-
 	 int val;
 
-	/*Initialize Port E*/
+	//initialize port E
 	 PEADDR = 0x02; 		//alt function
 	 PECTL = 0x00; 			//no alt function
 	 PEADDR = 0x01; 		//data dir
@@ -15,7 +14,7 @@
 	 PECTL = 0x00; 			//set to push pull rather than open drain
 	 PEADDR = 0x00; 		//prevents inadvertent changes to sub registers
 
-	/*Intializie Port D */
+	//initialize port D
 	 PDADDR = 0x02; 		//alt function
 	 PDCTL = 0x00; 			//no alt function
 	 PDADDR = 0x01; 		//data dir
