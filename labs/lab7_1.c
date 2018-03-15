@@ -1,13 +1,11 @@
-
- #include <ez8.h>
-
-/*-- 				PROTOTYPES					--*/
- void init_ports(void);		// port initialization
- void sdelay(unsigned int);	// call delay function
- void motor (void);			// call motor function
+#include <stdio.h>
+#include <ez8.h>
 
 
-/*-- 			START MAIN FUNCTION 			--*/
+ void init_ports(void);				// declare port initialization function
+ void sdelay(unsigned int);			// declare delay function
+ void motor (void);					// declare call motor function
+
  void main(void)
  {
 	init_ports();			// initialize ports (function call)
@@ -16,10 +14,9 @@
 
 
 
-/*-- 			PORT FUNCTION				--*/
- void init_ports(void)
+ void init_ports(void)		//this function initializes Port D and Port A
  {
-	/*-- Initialize Port A --*/
+	//initialize port A
 	PDADDR= 0x02; 			// alt function
 	PDCTL= 0x00; 			// no alt function
 	PDADDR= 0x01; 			// data dir
@@ -28,7 +25,7 @@
 	PDCTL= 0x00; 			// pushpull only
 	PDADDR= 0x00; 			// prevents inadvert changes to the sub registers
 
-	/*-- Initialize Port G --*/
+	//initialize port G
 	PGADDR= 0x02; 			// alt function
 	PGCTL= 0x00; 			// no alt function
 	PGADDR= 0x01; 			// data dir
@@ -36,47 +33,46 @@
 	PGADDR= 0x03; 			// output ctrl
 	PGCTL= 0x00; 			// pushpull only
 	PGADDR= 0x00; 			// prevents inadvert changes to the sub registers
- }
-/*-- 			END PORT FUNCTION				--*/
 
-/*-- 			DELAY FUNCTION				--*/
+ }//end of port initialization
+
+
  void sdelay(unsigned int time)
  {
-	for(;time>0;time--) 	// any condition, greater than 0, decrement
-		;					// destroy all humans
- }
-/*-- 			END DELAY FUNCTION				--*/
+	for(;time>0;time--);						// any condition, greater than 0, decrement
 
-/*-- 			START MOTOR FUNCTION				--*/
+ }//end sdelay
+
  void motor (void)
  {
-	unsigned int hi_time[4]= {300, 500, 800, 150};			 // arrays to subtract
-	unsigned int choice;									// makes unsigned int
-	unsigned int dcycle;									// initializes duty cycle
-	int period= 1000;										// max delay period
+	unsigned int hi_time[4]= {300, 500, 800, 150};		// arrays to subtract
+	unsigned int choice;								// makes unsigned int
+	unsigned int duty_cycle;							// initializes duty cycle
+	int period= 1000;									// max delay period
 
 	while (1)
 	{
 
-		choice = PDIN& 0x07;		// loops users choice
+		choice = PDIN & 0x07;				// loops users choice
 
-		switch (choice)				// switch case choice
+		switch (choice)						// switch case choice
 		{
-			case (0x01):			// case 1
-				dcycle= hi_time[0]; // call 1st array in high_time
+			case (0x01):					// case 1
+				duty_cycle= hi_time[0]; 	// call 1st array in high_time
 				break;
-			case (0x03):			// case 2
-				dcycle= hi_time[1];	// calls 2nd array in high_time
+			case (0x03):					// case 2
+				duty_cycle= hi_time[1];		// calls 2nd array in high_time
 				break;
-			case(0x07):				// case 3
-				dcycle= hi_time[2];	// calls 3rd array in high_time
+			case(0x07):						// case 3
+				duty_cycle= hi_time[2];		// calls 3rd array in high_time
 				break;
-			default:				// default case
-				dcycle= hi_time[3];	// calls 4rth array in high_time
+			default:						// default case
+				duty_cycle= hi_time[3];		// calls 4rth array in high_time
 		}
 
-	 PGOUT= 0x01;					// designates 0x01 to PGOUT
-	 sdelay(dcycle);				// calls dcycle from chosen case
-	 PGOUT= 0x00;					// designates 0x00 to PGOUT
-	 sdelay(period - dcycle);		// subtract period from duty cycle
-	}
+	 PGOUT= 0x01;							// designates 0x01 to PGOUT
+	 sdelay(dcycle);						// calls dcycle from chosen case
+	 PGOUT= 0x00;							// designates 0x00 to PGOUT
+	 sdelay(period - dcycle);				// subtract period from duty cycle
+
+	}//end motor function
