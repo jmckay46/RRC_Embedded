@@ -1,40 +1,28 @@
-/*--      START HEADER FILES      --*/
-  #include <ez8.h>                          // zilog gpio library
-  #include <stdio.h>                        // standard inputoutput library for c
-  // #include <stdlib.h>                    // can be used for premade delay() funtion
-/*--      END HEADER F ILES       --*/
+  #include <ez8.h>
+  #include <stdio.h>
+  // #include <stdlib.h>
 
-/*--      FUNCTION PROTOTYPES      --*/
  unsigned char low_button(void);            // function for released button
  unsigned char high_button(void);           // function for pushed button
  void delay(unsigned int time);             // delay function
  void ports_initialize(void);               // port initialization function
  void button_function(void);                // function for pushed button
-/*--      END PROTOTYPES      --*/
 
 
-/*--      MAIN FUNCTION      --*/
  void main(void)
  {
-  unsigned char counter;  //  declare counter as a variable
-  ports_initialize();     //  excecutes ports initialization function
+  unsigned char counter;         //  declare counter as a variable
+  ports_initialize();            //  excecutes ports initialization function
 
   while(1)
    {
-    button_function();    // excecutes button_function() function
-    counter++;            // incremently count
-    PEOUT = counter;      // PEOUT takes the variable of "counter"
+     button_function();         // excecutes button_function() function
+     counter++;                 // incremently count
+     PEOUT = counter;           // PEOUT takes the variable of "counter"
    }
  }
 
 
-
-
-/********************************************************/
-
-
-
-/*--      PORT INITIALIZATION FUNCTION      --*/
  void ports_initialize(void)
  {
   PEADDR = 0x02;            // alt func
@@ -57,11 +45,9 @@
   PCCTL = 0x01;             // set bit 0 to I/P
   PCADDR = 0x00;            // prevents inadvertent changes to sub registers
  }
-/*--      END PORT INITIALIZATION FUNCTION      --*/
+//end of port initialization
 
 
-
-/*--      PRESSED BUTTON FUNCTION      --*/
  void button_function(void)
    {
     while(high_button() == 0);  // excecute high_button when button_function is called
@@ -84,13 +70,11 @@
           return(0);            // exit function and return 0
        }
  else
-  return(0);                    //<-- exit function and return 0
+  return(0);                    //exit function and return 0
  }
-/*--      END PRESSED BUTTON FUNCTION      --*/
 
 
 
-/*--      RELEASED BUTTON FUNCTION      --*/
  unsigned char low_button(void)   //
   {
    unsigned char mask_b;          // sets mask_b as an unsigend intiger
@@ -112,14 +96,13 @@
 
 
 //This function will is a nested loops to create delays rather than using the delay(); function built in to stdlib.h
-*/
+
  void delay(unsigned int time)
  {
-  unsigned int delay;             // sets delay as an unsigned intiger
+  unsigned int delay;             //set delay as an unsigned int
   while(time > 0)
     {
      time--;
      for(delay=170; delay>0;delay--);
-
     }
  }
