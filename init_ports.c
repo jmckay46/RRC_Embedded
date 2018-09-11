@@ -6,12 +6,15 @@
 #define OUT_CTL 0x03
 
 void init_ports();
+void delay(unsigned int);
 
 void main()
 {
     init_ports();
     PEOUT = 0xFF;                   //test init_ports
 }
+
+//Function initializes Ports E as push/pull-outputs
 
 void init_ports()
 {
@@ -27,4 +30,12 @@ void init_ports()
     PEADDR = 0x00;                  //prevent inadvertent change
 
     return;
+}
+
+//the function delays input is the time in msec. according to the data sheet,
+//
+
+void delay(unsigned int t)
+{
+
 }
