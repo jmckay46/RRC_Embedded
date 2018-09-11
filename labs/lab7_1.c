@@ -7,14 +7,14 @@
  void motor (void);					// declare call motor function
 
  void main(void)
- {
-	init_ports();			// initialize ports (function call)
-	motor();				// run motor (function call)
- }
+{
+	init_ports();					// initialize ports (function call)
+	motor();						// run motor (function call)
+}
 
 
 
- void init_ports(void)		//this function initializes Port D and Port A
+ void init_ports(void)				//this function initializes Port D and Port A
  {
 	//initialize port A
 	PDADDR= 0x02; 			// alt function
