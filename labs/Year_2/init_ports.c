@@ -32,10 +32,12 @@ void init_ports()
     return;
 }
 
-//the function delays input is the time in msec. according to the data sheet,
-//
+//the function delays input is the time in msec.
 
 void delay(unsigned int t)
 {
+    while (t > 0)
+    {
 
+    }
 }
