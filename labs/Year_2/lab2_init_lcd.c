@@ -8,20 +8,13 @@
 void init_ports(void);                      //initializes port E as o/p - pushpull configuartion
 void delay_ms(unsigned int);
 unsigned char rd_busy();
+void lcd_ready();
 
 void main(void)
 {
     init_ports();
-	delay_ms(15);
+	lcd_ready();
 
-    PEADDR = DATA_DIR;
-    PECTL = 0xF0;                           //set 4 MSb's as inputs
-    PEADDR = 0x00;
-
-	while(rd_busy() == 1)
-	{
-		;
-	}
 }
 
 void init_ports(void)
@@ -81,25 +74,19 @@ unsigned char rd_busy()
         busy_status = 1;
     }
 
-    return(busy_status);
+ return(busy_status);
 }
 
+void lcd_ready()
+{
+    PEADDR = DATA_DIR;
+    PECTL = 0xF0;                           //set 4 MSb's as inputs
+    PEADDR = 0x00;
 
+	while(rd_busy() == 1)
+	{
+		;
+	}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+	init_ports();
+}
