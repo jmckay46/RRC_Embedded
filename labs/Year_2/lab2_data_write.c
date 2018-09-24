@@ -7,17 +7,27 @@
 
 void init_ports(void);                      //initializes port E as o/p - pushpull configuartion
 void delay_ms(unsigned int);
-void soft_reset();
-void lcd_ready();
-
+void cmd_write(unsigned char);
+void data_write(unsigned char);
+void soft_reset(void);
 unsigned char rd_busy();
+void lcd_ready();
+void init_lcd();
 
 void main(void)
-{
-    lcd_ready();
-    //soft_reset()
+{	
+	init_ports();
+	init_lcd();
+	cmd_write(0x80);
+	lcd_ready();
+	
+	while(1)
+	{
+		data_write(0x65);
+		delay_ms(80000);
+	}
 
-
+		
 }
 
 void init_ports(void)
@@ -51,6 +61,47 @@ void delay_ms(unsigned int time_ms)
     }
 }
 
+void init_lcd()
+{
+	soft_reset();
+	
+	lcd_ready();
+	cmd_write(0x28);
+	
+	lcd_ready();
+	cmd_write(0x0F);
+	
+	lcd_ready();
+	cmd_write(0x06);
+	
+	lcd_ready();
+	cmd_write(0x01);
+}
+
+void soft_reset()
+{
+	delay_ms(16);
+	PEOUT = 0x30;
+	PEOUT = 0x38;
+	PEOUT = 0x30;
+	
+	delay_ms(5);
+	PEOUT = 0x30;
+	PEOUT = 0x38;
+	PEOUT = 0x30;
+	
+	delay_ms(1);
+	PEOUT = 0x30;
+	PEOUT = 0x38;
+	PEOUT = 0x30;
+	
+	PEOUT = 0x20;
+	PEOUT = 0x28;
+	PEOUT = 0x20;
+}
+
+
+
 //this function returns the status of rd_busy as a char-> returns the busy_status
 
 unsigned char rd_busy()
@@ -77,22 +128,61 @@ unsigned char rd_busy()
         busy_status = 1;
     }
 
- return(busy_status);
+    return(busy_status);
 }
 
 void lcd_ready()
 {
-    PEADDR = DATA_DIR;
-    PECTL = 0xF0;                           //set 4 MSb's as inputs
-    PEADDR = 0x00;
-
+	PEADDR = DATA_DIR;
+	PECTL = 0xF0;
+	PEADDR = 0x00;
+	
 	while(rd_busy() == 1)
 	{
 		;
 	}
-
-	init_ports();
 }
 
+void cmd_write(unsigned char val)
+{
+	char high_nib;
+	char low_nib;
+	
+	high_nib = 0xF0 & val;
+	
+	//shift val 4 places to the left and assign it to low_nib
+	low_nib = val < 4;
+	
+	lcd_ready();
+	
+	PEOUT = 0x00;
+	
+	PEOUT = high_nib;
+	PEOUT = high_nib^0x08;
+	PEOUT = high_nib;
+	
+	PEOUT = low_nib;
+	PEOUT = low_nib^0x08;
+	PEOUT = low_nib;
+}
 
-
+void data_write(unsigned char val)
+{
+	char highnib;
+	char lownib;
+	
+	highnib = (val&0xF0)|0x04;
+	lownib = (val<<4)|0x04;
+	
+	lcd_ready();
+	
+	PEOUT = 0x04;
+	
+	PEOUT = highnib;
+	PEOUT = highnib^0x08;
+	PEOUT = highnib;
+	
+	PEOUT = lownib;
+	PEOUT = lownib^0x08;
+	PEOUT = lownib;
+}

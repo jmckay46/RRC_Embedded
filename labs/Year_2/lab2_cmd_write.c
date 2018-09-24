@@ -7,8 +7,9 @@
 
 void init_ports(void);                      //initializes port E as o/p - pushpull configuartion
 void delay_ms(unsigned int);
-void soft_reset();
+//void soft_reset();
 void lcd_ready();
+//void cmd_write(unsigned char);
 
 unsigned char rd_busy();
 
