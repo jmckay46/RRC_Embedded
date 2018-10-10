@@ -7,7 +7,7 @@ port (
 		b		:in	std_logic_vector(3 downto 0);
 		s		:in	std_logic;
 
-		y		:out std_logic_vector(3 downto 0));
+		y		:out	std_logic_vector(3 downto 0));
 end quad2to1mux;
 
 architecture circuit of quad2to1mux is
