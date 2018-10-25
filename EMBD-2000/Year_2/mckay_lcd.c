@@ -15,32 +15,37 @@ void soft_reset();
 void cmd_write(unsigned char);
 void data_write(unsigned char);
 void lcd_ready();
+void LCD_Write_String(char msg[]);
 unsigned char rd_busy();
-
 
 void main()
 {
-	int cnt = 0;
 	char msg1[] = "Jonathan R.McKay";
-	char msg2[] = "Never give up.:D";
+	char msg2[] = "Never gives up:D";
+	char *msg;
 
     init_ports();
     init_lcd();
 
 	cmd_write(0x80);
-	for(; cnt < MAX_LINES; cnt++)
-	{
-		 data_write(msg1[cnt]);
-		 delay(1000);
-	}
+	msg = msg1;
+	LCD_Write_String(msg);
 
 	cmd_write(0xC0);
-	for(cnt = 0; cnt < MAX_LINES; cnt++)
-	{
-		 data_write(msg2[cnt]);
-		 delay(1000);
-	}
+	msg = msg2;
+	LCD_Write_String(msg);
+}
 
+void LCD_Write_String(char *p_msg)
+{
+	unsigned char count = 0;
+	while((0!=*p_msg)&&(count != 16))
+	{
+		data_write(*p_msg++);
+		count++;
+		delay(10);
+	}
+	delay(10);
 }
 
 void init_ports()
@@ -172,4 +177,3 @@ unsigned char rd_busy()
 
     return(status);
 }
-
