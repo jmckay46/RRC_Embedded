@@ -19,8 +19,19 @@ unsigned char rd_busy();
 
 void main()
 {
+	char msg[] = "Jonathan McKay";
+	int cnt = 0;
+
     init_ports();
     init_lcd();
+
+	cmd_write(0x80);
+	cmd_write(0x01);
+	for(;cnt < 14; cnt++)
+	{
+		data_write(msg[cnt]);
+		delay(1000);
+	}
 }
 
 void init_ports()
@@ -93,11 +104,9 @@ void cmd_write(unsigned char val)
 
 	lcd_ready();
 
-    //PEOUT = 0x00;
     PEOUT = highnib | 0x08;
     PEOUT = highnib;
 
-	//PEOUT = 0x00;
 	PEOUT = lownib | 0x08;
 	PEOUT = lownib;
 }
@@ -112,16 +121,18 @@ void data_write(unsigned char data)
 
 	lcd_ready();
 
-    PEOUT = high_nib | 0x0C;
-    PEOUT = high_nib | 0x04;
+	PEOUT = 0x0A;
+    PEOUT = high_nib | 0x0A;
+    PEOUT = high_nib;
 
-    PEOUT = low_nib | 0x0C;
-    PEOUT = low_nib | 0xF7;
+	PEOUT = 0x0A;
+    PEOUT = low_nib | 0x0A;
+    PEOUT = low_nib;
 }
 
 void lcd_ready()
 {
-	while(rd_busy() == BUSY);
+	while(rd_busy() == READY);
     init_ports();
 }
 
@@ -131,54 +142,24 @@ unsigned char rd_busy()
 	PEADDR = DATA_DIR;
 	PECTL = 0xF0;
 
-    PEOUT = 0x02;
-    PEOUT = 0x0A;
+    PEOUT = 0x04;
+    PEOUT = 0x0C;
 
     status = PEIN;
 	status = status & 0x80;
 
-    PEOUT = 0x02;
-    PEOUT = 0x0A;
-    PEOUT = 0x02;
+    PEOUT = 0x04;
+    PEOUT = 0x0C;
+    PEOUT = 0x04;
 
     if(status = 0x80)
     {
-        status = READY;
+        status = BUSY;
     }
     else
     {
-        status = BUSY;
+        status = READY;
     }
 
     return(status);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
