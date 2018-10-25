@@ -3,6 +3,7 @@
 
 #define BUSY 1
 #define READY 0
+#define MAX_LINES 16
 #define DATA_DIR 0x01
 #define ALT_FUN 0x02
 #define OUT_CTL 0x03
@@ -19,19 +20,27 @@ unsigned char rd_busy();
 
 void main()
 {
-	char msg[] = "Jonathan McKay";
 	int cnt = 0;
+	char msg1[] = "Jonathan R.McKay";
+	char msg2[] = "Never give up.:D";
 
     init_ports();
     init_lcd();
 
 	cmd_write(0x80);
-	cmd_write(0x01);
-	for(;cnt < 14; cnt++)
+	for(; cnt < MAX_LINES; cnt++)
 	{
-		data_write(msg[cnt]);
-		delay(1000);
+		 data_write(msg1[cnt]);
+		 delay(1000);
 	}
+
+	cmd_write(0xC0);
+	for(cnt = 0; cnt < MAX_LINES; cnt++)
+	{
+		 data_write(msg2[cnt]);
+		 delay(1000);
+	}
+
 }
 
 void init_ports()
@@ -163,3 +172,4 @@ unsigned char rd_busy()
 
     return(status);
 }
+
