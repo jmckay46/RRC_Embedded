@@ -8,7 +8,7 @@
 #define ALT_FUN 0x02
 #define OUT_CTL 0x03
 
-void init_ports();
+void init_port_E();
 void init_lcd();
 void delay(unsigned int);
 void soft_reset();
@@ -24,7 +24,7 @@ void main()
 	char msg2[] = "Never gives up:D";
 	char *msg;
 
-    init_ports();
+    init_port_E();
     init_lcd();
 
 	cmd_write(0x80);
@@ -48,7 +48,7 @@ void LCD_Write_String(char *p_msg)
 	delay(10);
 }
 
-void init_ports()
+void init_port_E()
 {
     PEADDR = ALT_FUN;
     PECTL = 0x00;
@@ -147,7 +147,7 @@ void data_write(unsigned char data)
 void lcd_ready()
 {
 	while(rd_busy() == READY);
-    init_ports();
+    init_port_E();
 }
 
 unsigned char rd_busy()
